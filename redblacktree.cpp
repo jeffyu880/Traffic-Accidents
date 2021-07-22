@@ -1,4 +1,6 @@
 #include "redblacktree.h"
+#include "node.h"
+#pragma once
 
 Node *RedBlackTree::InsertNode(Node *root, Node *newNode)
 {
@@ -21,6 +23,10 @@ Node *RedBlackTree::InsertNode(Node *root, Node *newNode)
 Node *RedBlackTree::BalanceTree(Node *root)
 {
     //Case 1: tree is empty
+    if (root->parent == nullptr)
+    {
+        root->color = false;
+    }
 }
 
 //PARAMETERS CAN CHANGE
