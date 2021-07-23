@@ -28,17 +28,70 @@ Node *RedBlackTree::Insert(Node *root, Node *newNode)
 
 Node *RedBlackTree::BalanceTree(Node *root)
 {
-    //Case 1: tree is empty
+    //Case 1: tree is empty (no parent node, root is mainRoot)
     if (root->parent == nullptr)
     {
-        root->color = false;
+        root->color = true; //color it black
     }
+
     //Case 2: if tree is not empty, create a new node as a leaf node with color red
     //If parent of node is black, exit
 
-    //If parent of node is red, check sibling of parent
+    if (root->parent->color == true){ //parent is black, so no rules broken, return
+	    return root;
+    }
 
-    //if color is black, rotate and recolor
+    //else parent is red, and you must check uncle
+
+    Node* uncle;
+
+
+    if (root->parent->parent->left == root->parent) {
+        uncle = root->parent->parent->right;
+    }
+    else {
+        uncle = root->parent->parent->left;
+    }
+
+    //if uncle is null or black:
+    if ((uncle == nullptr) || (uncle->color == true)) {
+        Node* grandparent = root->parent->parent;
+        //code to help find what kind of imbalance is occurring
+        if (grandparent->left == root->parent) {
+            if (root->parent->left == root) {
+                rotateRight(grandparent);
+                BalanceTree(node->parent);
+            }
+            else {
+                rotateLeftRight(grandparent);
+                BalanceTree(node);
+            }
+        }
+        else {
+            if (root->parent->left == root) {
+                rotateRightLeft(grandparent);
+                BalanceTree(node);
+            }
+            else {
+                rotateLeft(grandparent);
+                BalanceTree(node->parent);
+            }
+        }
+
+    }
+    //else its red:
+    else {
+        //flip colors
+        root->color = true;
+        root->parent->color = false;
+        uncle->color = false;
+        //root is correct, now make sure that the parent now satisfies the rules
+        BalanceTree(root->parent);
+    }
+        
+
+
+   
 
     //if red, recolor the node,
 }

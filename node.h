@@ -29,15 +29,16 @@ struct Node
     //more data
 
     /*****************************TREE STRUCTURES**********************************/
-    enum Color
+    /*enum Color
     {
         black,
         red
     };
+    */
     Node *left = nullptr;
     Node *right = nullptr;
     Node *parent = nullptr;
-    bool color = red;
+    bool black = false;
     Node(vector<string> InitialzationVector);
     float calculateSeverity();
 
