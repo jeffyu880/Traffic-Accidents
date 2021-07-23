@@ -1,6 +1,12 @@
 #include "redblacktree.h"
+#include "node.h"
 
-Node *RedBlackTree::InsertNode(Node *root, Node *newNode)
+Node *RedBlackTree::InsertNode(Node *newNode)
+{
+    mainRoot = Insert(mainRoot, newNode);
+}
+
+Node *RedBlackTree::Insert(Node *root, Node *newNode)
 {
     if (root == nullptr)
     {
@@ -9,11 +15,13 @@ Node *RedBlackTree::InsertNode(Node *root, Node *newNode)
     }
     else if (newNode->severityIndex > root->severityIndex)
     {
-        root->right = InsertNode(root->right, newNode);
+        root->right = Insert(root->right, newNode);
+        newNode->parent = root;
     }
     else
     {
-        root->left = InsertNode(root->left, newNode);
+        root->left = Insert(root->left, newNode);
+        newNode->parent = root;
     }
     return BalanceTree(root);
 }
@@ -21,11 +29,43 @@ Node *RedBlackTree::InsertNode(Node *root, Node *newNode)
 Node *RedBlackTree::BalanceTree(Node *root)
 {
     //Case 1: tree is empty
+    if (root->parent == nullptr)
+    {
+        root->color = false;
+    }
+    //Case 2: if tree is not empty, create a new node as a leaf node with color red
+    //If parent of node is black, exit
+
+    //If parent of node is red, check sibling of parent
+
+    //if color is black, rotate and recolor
+
+    //if red, recolor the node,
+}
+
+Node *RedBlackTree::SearchNode(int severitytoFind)
+{
 }
 
 //PARAMETERS CAN CHANGE
-Node *RedBlackTree::SearchNode(int severityIndex)
+Node *RedBlackTree::Search(Node *root, int severitytoFind)
 {
+    if (root == nullptr)
+    {
+        return nullptr;
+    }
+    else if (severitytoFind == root->severityIndex)
+    {
+        return root;
+    }
+    else if (severitytoFind > root->severityIndex)
+    {
+        return Search(root->left, severitytoFind);
+    }
+    else
+    {
+        return Search(root->right, severitytoFind);
+    }
 }
 
 Node *RedBlackTree::RotateLeft(Node *node)

@@ -1,5 +1,7 @@
 #include <vector>
 #include <string>
+#pragma once
+
 using namespace std;
 struct Node
 {
@@ -27,14 +29,18 @@ struct Node
     //more data
 
     /*****************************TREE STRUCTURES**********************************/
-    enum Color : bool
+    enum Color
     {
-        black = false,
-        red = true,
+        black,
+        red
     };
     Node *left = nullptr;
     Node *right = nullptr;
     Node *parent = nullptr;
+    bool color = red;
     Node(vector<string> InitialzationVector);
     float calculateSeverity();
+
+    //TESTING
+    Node(float severityIndex);
 };

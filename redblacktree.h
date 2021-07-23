@@ -1,16 +1,19 @@
 #include "node.h"
+#pragma once
 
 class RedBlackTree
 {
 private:
-    Node *mainRoot;
+    Node *mainRoot = nullptr;
     Node *BalanceTree(Node *node);
     Node *RotateLeft(Node *node);
     Node *RotateRight(Node *node);
-    Node *RedBlackTree::RotateLeftRight(Node *node);
-    Node *RedBlackTree::RotateRightLeft(Node *node);
+    Node *RotateLeftRight(Node *node);
+    Node *RotateRightLeft(Node *node);
+    Node *Insert(Node *root, Node *node);
+    Node *Search(Node *root, int severitytoFind);
 
 public:
-    Node *InsertNode(Node *root, Node *newNode);
-    Node *SearchNode(int severityIndex);
+    Node *InsertNode(Node *newNode);
+    Node *SearchNode(int severitytoFind);
 };
