@@ -38,7 +38,7 @@ struct Node
     Node *left = nullptr;
     Node *right = nullptr;
     Node *parent = nullptr;
-    bool black = false;
+    bool color = false;
     Node(vector<string> InitialzationVector);
     float calculateSeverity();
 
