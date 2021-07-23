@@ -1,6 +1,5 @@
 #include "redblacktree.h"
 #include "node.h"
-#pragma once
 
 Node *RedBlackTree::InsertNode(Node *root, Node *newNode)
 {
