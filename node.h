@@ -40,4 +40,7 @@ struct Node
     bool color = red;
     Node(vector<string> InitialzationVector);
     float calculateSeverity();
+
+    //TESTING
+    Node(float severityIndex);
 };
