@@ -5,5 +5,11 @@ using namespace std;
 
 int main()
 {
-    cout << "yes";
+    RedBlackTree *tree = new RedBlackTree();
+    Node *newNode = new Node(123);
+    tree->InsertNode(newNode);
+    newNode = new Node(22);
+    tree->InsertNode(newNode);
+    newNode = new Node(32);
+    tree->InsertNode(newNode);
 }
