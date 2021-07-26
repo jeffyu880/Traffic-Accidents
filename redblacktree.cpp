@@ -1,9 +1,30 @@
 #include "redblacktree.h"
 #include "node.h"
+#include <iostream>
 
-Node *RedBlackTree::InsertNode(Node *newNode)
+using namespace std;
+
+Node *RedBlackTree::FindLeastSevereAccident()
+{
+    Node *found = nullptr;
+    found = GetleastSevereAccident(mainRoot);
+    return found;
+}
+
+Node *RedBlackTree::FindMostSevereAccident()
+{
+    return GetmostSevereAccident(mainRoot);
+}
+
+void RedBlackTree::InsertNode(Node *newNode)
 {
     mainRoot = Insert(mainRoot, newNode);
+    BalanceTree(mainRoot, newNode);
+}
+
+Node *RedBlackTree::SearchNode(int severitytoFind)
+{
+    return Search(mainRoot, severitytoFind);
 }
 
 Node *RedBlackTree::Insert(Node *root, Node *newNode)
@@ -16,88 +37,14 @@ Node *RedBlackTree::Insert(Node *root, Node *newNode)
     else if (newNode->severityIndex > root->severityIndex)
     {
         root->right = Insert(root->right, newNode);
-        newNode->parent = root;
+        root->right->parent = root;
     }
     else
     {
         root->left = Insert(root->left, newNode);
-        newNode->parent = root;
+        root->left->parent = root;
     }
-    return BalanceTree(root);
-}
-
-Node *RedBlackTree::BalanceTree(Node *root)
-{
-    //Case 1: tree is empty (no parent node, root is mainRoot)
-    if (root->parent == nullptr)
-    {
-        root->color = true; //color it black
-    }
-
-    //Case 2: if tree is not empty, create a new node as a leaf node with color red
-    //If parent of node is black, exit
-
-    if (root->parent->color == true){ //parent is black, so no rules broken, return
-	    return root;
-    }
-
-    //else parent is red, and you must check uncle
-
-    Node* uncle;
-
-
-    if (root->parent->parent->left == root->parent) {
-        uncle = root->parent->parent->right;
-    }
-    else {
-        uncle = root->parent->parent->left;
-    }
-
-    //if uncle is null or black:
-    if ((uncle == nullptr) || (uncle->color == true)) {
-        Node* grandparent = root->parent->parent;
-        //code to help find what kind of imbalance is occurring
-        if (grandparent->left == root->parent) {
-            if (root->parent->left == root) {
-                rotateRight(grandparent);
-                BalanceTree(node->parent);
-            }
-            else {
-                rotateLeftRight(grandparent);
-                BalanceTree(node);
-            }
-        }
-        else {
-            if (root->parent->left == root) {
-                rotateRightLeft(grandparent);
-                BalanceTree(node);
-            }
-            else {
-                rotateLeft(grandparent);
-                BalanceTree(node->parent);
-            }
-        }
-
-    }
-    //else its red:
-    else {
-        //flip colors
-        root->color = true;
-        root->parent->color = false;
-        uncle->color = false;
-        //root is correct, now make sure that the parent now satisfies the rules
-        BalanceTree(root->parent);
-    }
-        
-
-
-   
-
-    //if red, recolor the node,
-}
-
-Node *RedBlackTree::SearchNode(int severitytoFind)
-{
+    return root;
 }
 
 //PARAMETERS CAN CHANGE
@@ -113,38 +60,207 @@ Node *RedBlackTree::Search(Node *root, int severitytoFind)
     }
     else if (severitytoFind > root->severityIndex)
     {
-        return Search(root->left, severitytoFind);
+        return Search(root->right, severitytoFind);
     }
     else
     {
-        return Search(root->right, severitytoFind);
+        return Search(root->left, severitytoFind);
     }
 }
 
-Node *RedBlackTree::RotateLeft(Node *node)
+void RedBlackTree::PrintInorder()
+{
+    printingInorder(mainRoot);
+}
+
+void RedBlackTree::PrintPreorder()
+{
+}
+
+void RedBlackTree::PrintPostorder()
+{
+}
+
+/*****************************REFERENCES*********************/
+/*Source: Cheryl Resch video on Red Black Tree for BalanceTree
+https://mediasite.video.ufl.edu/Mediasite/Play/dd2c7230add6482e87e0c371fb3988931d
+ Code: BalanceTree
+ ************************************************************/
+void RedBlackTree::BalanceTree(Node *root, Node *node)
+{
+    //Case 1: tree is empty (no parent node, root is mainRoot)
+    if (node->parent == nullptr)
+    {
+        node->color = true; //color it black
+        return;
+    }
+
+    //Case 2: if tree is not empty, create a new node as a leaf node with color red
+    //If parent of node is black, exit
+
+    if (node->parent->color == true)
+    { //parent is black, so no rules broken, return
+        return;
+    }
+
+    //Case 3: parent is red
+    Node *uncle = getUncle(node);
+    Node *grandparent = getGrandparent(node);
+    Node *parent = node->parent;
+    //Case 3a: if uncle is red, flip the colors of parent and uncle and grandparent and check for imbalances of grandparent
+    if (uncle != nullptr && uncle->color == false)
+    {
+        parent->color = true;
+        uncle->color = true;
+        grandparent->color = false;
+        BalanceTree(root, grandparent);
+        return;
+    }
+    //Case 3b: red parent, no red uncle, left right imbalance
+    if (node == parent->right && parent == grandparent->left)
+    {
+        RotateLeft(root, parent);
+        node = parent;
+        parent = node->parent;
+    }
+    //Case 3c: red parent, no red uncle, right left imbalance
+    else if (node == parent->left && parent == grandparent->right)
+    {
+        RotateRight(root, parent);
+        node = parent;
+        parent = node->parent;
+    }
+    //Case 4a: red parent, no red uncle, and left imbalance about grandparent
+    parent->color = true;
+    grandparent->color = false;
+    if (node == parent->left)
+    {
+        RotateRight(root, grandparent);
+    }
+    //Case 4b: red parent, no red uncle and right imbalance about grandparent
+    else
+    {
+        RotateLeft(root, grandparent);
+    }
+}
+
+void RedBlackTree::printingInorder(Node *node)
+{
+    if (node == nullptr)
+    {
+        return;
+    }
+    printingInorder(node->left);
+    //cout << node->severityIndex << " ";
+    // if (node->color == false)
+    // {
+    //     cout << "red" << endl;
+    // }
+    // else
+    // {
+    //     cout << "black" << endl;
+    // }
+    treesize++;
+    printingInorder(node->right);
+}
+/*****************************REFERENCES*********************/
+/*Source: Introduction to Algorithms by Thomas H. Cormen
+ Code:  RotateLeft and RotateRight Functions
+ ************************************************************/
+void RedBlackTree::RotateLeft(Node *root, Node *node)
 {
     Node *newRoot = node->right;
+    //setting the node's right subtree equal to newRoot's left subtree
     node->right = newRoot->left;
+    //newRoot's left parent is node's parent
+    if (newRoot->left != nullptr)
+    {
+        newRoot->left->parent = node;
+    }
+    newRoot->parent = node->parent;
+    //if node does not have a parent, newRoot becomes the mainRoot of tree
+    if (node->parent == nullptr)
+    {
+        mainRoot = newRoot;
+    }
+    //configuring the parent of node to print to newRoot
+    else if (node == node->parent->left)
+    {
+        node->parent->left = newRoot;
+    }
+    else
+    {
+        node->parent->right = newRoot;
+    }
     newRoot->left = node;
-    return newRoot;
+    node->parent = newRoot;
+    return;
 }
 
-Node *RedBlackTree::RotateRight(Node *node)
+void RedBlackTree::RotateRight(Node *root, Node *node)
 {
     Node *newRoot = node->left;
+    //newRoot->parent = node->parent;
     node->left = newRoot->right;
+    if (newRoot->right != nullptr)
+    {
+        newRoot->right->parent = node;
+    }
+    newRoot->parent = node->parent;
+    if (node->parent == nullptr)
+    {
+        mainRoot = newRoot;
+    }
+    else if (node == node->parent->left)
+    {
+        node->parent->left = newRoot;
+    }
+    else
+    {
+        node->parent->right = newRoot;
+    }
     newRoot->right = node;
-    return newRoot;
+    node->parent = newRoot;
+    return;
 }
 
-Node *RedBlackTree::RotateLeftRight(Node *node)
+Node *RedBlackTree::getGrandparent(Node *node)
 {
-    node->left = RotateLeft(node->left);
-    return RotateRight(node);
+    return node->parent->parent;
 }
 
-Node *RedBlackTree::RotateRightLeft(Node *node)
+Node *RedBlackTree::getUncle(Node *node)
 {
-    node->right = RotateRight(node->right);
-    return RotateLeft(node);
+    if (node->parent->parent->left == node->parent)
+    {
+        return node->parent->parent->right;
+    }
+    else
+    {
+        return node->parent->parent->left;
+    }
+}
+
+Node *mostSevereAccident(Node *root)
+{
+    if (root->right == nullptr)
+    {
+        return root;
+    }
+    else
+    {
+        return mostSevereAccident(root->right);
+    }
+}
+
+Node *leastSevereAccident(Node *root)
+{
+    if (root->left == nullptr)
+    {
+        return root;
+    }
+    else
+    {
+        return leastSevereAccident(root->left);
+    }
 }

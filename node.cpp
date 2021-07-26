@@ -1,5 +1,10 @@
 #include "node.h"
 
+Node::Node(float newSeverity)
+{
+    severityIndex = newSeverity;
+}
+
 Node::Node(vector<string> initializationVector)
 {
 }
