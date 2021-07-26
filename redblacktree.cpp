@@ -6,14 +6,12 @@ using namespace std;
 
 Node *RedBlackTree::FindLeastSevereAccident()
 {
-    Node *found = nullptr;
-    found = GetleastSevereAccident(mainRoot);
-    return found;
+    return GetmostSevereAccident(mainRoot);
 }
 
 Node *RedBlackTree::FindMostSevereAccident()
 {
-    return GetmostSevereAccident(mainRoot);
+    return GetleastSevereAccident(mainRoot);
 }
 
 void RedBlackTree::InsertNode(Node *newNode)
@@ -241,7 +239,7 @@ Node *RedBlackTree::getUncle(Node *node)
     }
 }
 
-Node *mostSevereAccident(Node *root)
+Node *RedBlackTree::GetmostSevereAccident(Node *root)
 {
     if (root->right == nullptr)
     {
@@ -249,11 +247,11 @@ Node *mostSevereAccident(Node *root)
     }
     else
     {
-        return mostSevereAccident(root->right);
+        return GetmostSevereAccident(root->right);
     }
 }
 
-Node *leastSevereAccident(Node *root)
+Node *RedBlackTree::GetleastSevereAccident(Node *root)
 {
     if (root->left == nullptr)
     {
@@ -261,6 +259,6 @@ Node *leastSevereAccident(Node *root)
     }
     else
     {
-        return leastSevereAccident(root->left);
+        return GetleastSevereAccident(root->left);
     }
 }
