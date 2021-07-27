@@ -8,6 +8,7 @@ struct Node
     /*******************************ACCIDENT DATA**********************************/
     //All the data in an accident
     float severityIndex = 0.0f;
+    int year = 0;
     int startTime = 0;
     int endTime = 0;
     int timeDifference = 0;
@@ -43,5 +44,5 @@ struct Node
     float calculateSeverity();
 
     //TESTING
-    Node(float severityIndex);
+    Node(float severityIndex, string city, string state, int year);
 };
