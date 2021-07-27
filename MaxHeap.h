@@ -86,10 +86,6 @@ public:
             }
         }
 private:
-    T* data;
-    unsigned int capacity; 
-    unsigned int size; 
-
     //                                                                       Utility Functions 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -126,6 +122,12 @@ private:
             size -= 1;
         }
         else {
+            T* tempArray = new T[capacity];
+            for (unsigned int ii = 0; ii < size - 2; ii += 1) {
+                tempArray[ii] = data[ii];
+            }
+            data = tempArray;
+            delete[] data;
             size -= 1;
         }
     }
@@ -169,7 +171,11 @@ private:
     void remove() {
         T lastVal = data[size - 1];
         data[0] = lastVal;
-        resizeDown();
+        size -= 1; 
         HeapifyDown(0);
     }
+    //Variable Declaration
+    T* data;
+    unsigned int capacity;
+    unsigned int size;
 };
