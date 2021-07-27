@@ -49,8 +49,6 @@ public:
     //                                                                      Heap Functions
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    
-    public: 
         void insert(T val) {
             if (size == capacity) {
                 resizeUp();
@@ -117,17 +115,17 @@ private:
             for (unsigned int ii = 0; ii < size - 2; ii += 1) {
                 tempArray[ii] = data[ii];
             }
-            data = tempArray;
             delete[] data;
+            data = tempArray;
             size -= 1;
         }
         else {
-            T* tempArray = new T[capacity];
-            for (unsigned int ii = 0; ii < size - 2; ii += 1) {
+            T* tempArray = new T[capacity]; 
+            for (unsigned int ii = 0; ii < size - 1; ii += 1) {
                 tempArray[ii] = data[ii];
             }
-            data = tempArray;
             delete[] data;
+            data = tempArray;
             size -= 1;
         }
     }
@@ -171,7 +169,7 @@ private:
     void remove() {
         T lastVal = data[size - 1];
         data[0] = lastVal;
-        size -= 1; 
+        resizeDown();
         HeapifyDown(0);
     }
     //Variable Declaration
