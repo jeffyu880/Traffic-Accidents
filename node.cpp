@@ -1,8 +1,11 @@
 #include "node.h"
 
-Node::Node(float newSeverity)
+Node::Node(float newSeverity, string city, string state, int year)
 {
     severityIndex = newSeverity;
+    this->city = city;
+    this->state = state;
+    this->year = year;
 }
 
 Node::Node(vector<string> initializationVector)
