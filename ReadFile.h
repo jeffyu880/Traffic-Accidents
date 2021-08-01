@@ -48,55 +48,6 @@ double ParseTimeDifference(string time) {
 	return hours;
 }
 
-//Parses the Time Strings and stores a year, month, day, and time in an integer vector
-void ParseTime(string input, vector<int>& output) {
-	string temp = "";
-	string temp1 = "";
-	string temp2 = "";
-	string temp3 = "";
-	int tempInt;
-	//Parses the year
-	for (int ii = 0; ii < 4; ii += 1) {
-		temp += input.at(ii);
-	}
-	tempInt = stoi(temp);
-	output.push_back(tempInt);
-
-	//Parses the month
-	for (int ii = 5; ii < 7; ii += 1) {
-		temp1 += input.at(ii);
-	}
-	tempInt = stoi(temp1);
-	output.push_back(tempInt);
-
-	//Parses the day
-	for (int ii = 8; ii < 10; ii += 1) {
-		temp2 += input.at(ii);
-	}
-	tempInt = stoi(temp2);
-	output.push_back(tempInt);
-
-	//Parses the time
-	for (int ii = 11; ii < 13; ii += 1) {
-		if (isdigit(input.at(ii))) {
-			temp3 += input.at(ii);
-		}
-	}
-	tempInt = stoi(temp3);
-	output.push_back(tempInt);
-}
-
-//Parses Zip-Code (We only need the first 5 values)
-int ParseZip(string input) {
-	string temp = "";
-	int tempInt;
-	for (int ii = 0; ii < 5; ii += 1) {
-		temp += input.at(ii);
-	}
-	tempInt = stoi(temp);
-	return tempInt;
-}
-
 //Function to read in data from CSV file
 void ReadFile(string filename, vector<Accident>& accidentVector) {
 	ifstream inFile(filename);
@@ -117,8 +68,6 @@ void ReadFile(string filename, vector<Accident>& accidentVector) {
 			int vehiclesInvolved; 
 			string temp;
 			string ID;
-			string startTime;
-			string endTime;
 			string description;
 			string city;
 			string county;
@@ -148,10 +97,6 @@ void ReadFile(string filename, vector<Accident>& accidentVector) {
 			getline(stream, ID, ',');
 			getline(stream, temp, ',');
 			severity = stoi(temp);
-			getline(stream, startTime, ',');
-			ParseTime(startTime, intVector);
-			getline(stream, endTime, ',');
-			ParseTime(endTime, intVector);
 			getline(stream, temp, ','); 
 			timeDifference = ParseTimeDifference(temp); 
 			getline(stream, temp, ',');
@@ -232,10 +177,10 @@ void ReadFile(string filename, vector<Accident>& accidentVector) {
 	}
 }
 
-//Function to read in 1000 data points to decrease compile time for testing
+//Function to read in 100 data points to decrease compile time for testing
 void MinReadFile(string filename, vector<Accident>& accidentVector) {
 	ifstream inFile(filename);
-	int N = 1;
+	int N = 100;
 
 	if (inFile.is_open()) {
 		string line;
@@ -252,8 +197,6 @@ void MinReadFile(string filename, vector<Accident>& accidentVector) {
 			int vehiclesInvolved;
 			string temp;
 			string ID;
-			string startTime;
-			string endTime;
 			string description;
 			string city;
 			string county;
@@ -283,10 +226,6 @@ void MinReadFile(string filename, vector<Accident>& accidentVector) {
 			getline(stream, ID, ',');
 			getline(stream, temp, ',');
 			severity = stoi(temp);
-			getline(stream, startTime, ',');
-			ParseTime(startTime, intVector);
-			getline(stream, endTime, ',');
-			ParseTime(endTime, intVector);
 			getline(stream, temp, ',');
 			timeDifference = ParseTimeDifference(temp);
 			getline(stream, temp, ',');
