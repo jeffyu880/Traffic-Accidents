@@ -11,7 +11,13 @@ using namespace std;
 
 //Parses the time difference and stores it in units of hours
 double ParseTimeDifference(string time) {
-	int index = 0; 
+	int index; 
+	if (time.at(0) == '-') {
+		index = 1; 
+	}
+	else {
+		index = 0;
+	}
 	string days = "";
 	double hours;
 	string minutes = "";
@@ -58,9 +64,11 @@ void ReadFile(string filename, vector<Accident>& accidentVector) {
 		getline(inFile, line);
 		getline(inFile, line);
 		int N = 1;
-
+		int output = 1; 
 		//Reading in data and creating A LOT of variables to store it all (Created vectors to more easily pass in data into the accident object constructor)
 		while (getline(inFile, line)) {
+			cout << output << endl;
+			output += 1;
 			istringstream stream(line);
 
 			int severity;
@@ -187,9 +195,11 @@ void MinReadFile(string filename, vector<Accident>& accidentVector) {
 		//Reading the top two lines which are header files
 		getline(inFile, line);
 		getline(inFile, line);
-
+		int output = 1; 
 		//Reading in data and creating A LOT of variables to store it all (Created vectors to more easily pass in data into the accident object constructor)
 		while (getline(inFile, line) && N > 0) {
+			cout << output << endl; 
+			output += 1; 
 			istringstream stream(line);
 
 			int severity;
