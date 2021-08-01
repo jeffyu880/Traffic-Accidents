@@ -7,17 +7,14 @@ using namespace std;
 class Accident {
 public:
 	Accident(vector<int> intVector, vector<string> stringVector, vector<double> doubleVector);
+	Accident(const Accident& rhs);
+	bool operator<(const Accident& rhs);
+	bool operator>(const Accident& rhs); 
+	Accident&  operator=(const Accident& rhs); 
 	void calculateSeverity(); 
+	double getWeightedSeverity(); 
 private:
 	int severity;
-	int startYear;
-	int startMonth;
-	int startDay;
-	int startHour;
-	int endYear;
-	int endMonth;
-	int endDay;
-	int endHour;
 	int casualties; 
 	int vehiclesInvolved; 
 	string ID;

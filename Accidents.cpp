@@ -33,6 +33,83 @@ Accident::Accident(vector<int> intVector, vector<string> stringVector, vector<do
 	calculateSeverity(); 
 }
 
+Accident::Accident(const Accident& rhs) {
+	severity = rhs.severity; 
+	casualties = rhs.casualties; 
+	vehiclesInvolved = rhs.vehiclesInvolved; 
+	ID = rhs.ID; 
+	description = rhs.description; 
+	city = rhs.city; 
+	county = rhs.county; 
+	state = rhs.state; 
+	timeZone = rhs.timeZone; 
+	windDirection = rhs.windDirection; 
+	weatherCondition = rhs.weatherCondition; 
+	night_day = rhs.night_day; 
+	start_lat = rhs.start_lat; 
+	start_long = rhs.start_long; 
+	end_lat = rhs.end_lat; 
+	end_long = rhs.end_long; 
+	distance = rhs.distance; 
+	temperature = rhs.temperature; 
+	windChill = rhs.windChill; 
+	humidity = rhs.humidity; 
+	pressure = rhs.pressure; 
+	visibility = rhs.visibility; 
+	windSpeed = rhs.windSpeed; 
+	precipitation = rhs.precipitation; 
+	weightedSeverity = rhs.weightedSeverity; 
+	timeDifference = rhs.timeDifference; 
+}
+
+bool Accident::operator<(const Accident& rhs) {
+	if (weightedSeverity < rhs.weightedSeverity) {
+		return true; 
+	}
+	else {
+		return false; 
+	}
+}
+
+bool Accident::operator>(const Accident& rhs) {
+	if (weightedSeverity > rhs.weightedSeverity) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+Accident& Accident::operator=(const Accident& rhs) {
+	severity = rhs.severity;
+	casualties = rhs.casualties;
+	vehiclesInvolved = rhs.vehiclesInvolved;
+	ID = rhs.ID;
+	description = rhs.description;
+	city = rhs.city;
+	county = rhs.county;
+	state = rhs.state;
+	timeZone = rhs.timeZone;
+	windDirection = rhs.windDirection;
+	weatherCondition = rhs.weatherCondition;
+	night_day = rhs.night_day;
+	start_lat = rhs.start_lat;
+	start_long = rhs.start_long;
+	end_lat = rhs.end_lat;
+	end_long = rhs.end_long;
+	distance = rhs.distance;
+	temperature = rhs.temperature;
+	windChill = rhs.windChill;
+	humidity = rhs.humidity;
+	pressure = rhs.pressure;
+	visibility = rhs.visibility;
+	windSpeed = rhs.windSpeed;
+	precipitation = rhs.precipitation;
+	weightedSeverity = rhs.weightedSeverity;
+	timeDifference = rhs.timeDifference;
+	return *this; 
+}
+
 void Accident::calculateSeverity()
 {
 	double weightedCasualty = ((double)casualties / 16.0f) * 0.2f;
@@ -43,4 +120,8 @@ void Accident::calculateSeverity()
 
 	weightedSeverity = weightedCasualty + weightedVehicles + weightedDistance + weightedTime + maxSeverity;
 	
+}
+
+double Accident::getWeightedSeverity() {
+	return weightedSeverity; 
 }
