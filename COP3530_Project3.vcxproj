@@ -151,11 +151,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Accidents.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="node.cpp" />
+    <ClCompile Include="redblacktree.cpp" />
+    <ClCompile Include="redblacktree.h" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Accidents.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MaxHeap.h" />
+    <ClInclude Include="MinHeap.h" />
+    <ClInclude Include="node.h" />
+    <ClInclude Include="ReadFile.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="VisualElements.h" />
   </ItemGroup>

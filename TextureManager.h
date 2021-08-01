@@ -5,6 +5,9 @@
 
 
 //CITATION
+//Author: Joshua Fox, Professor for COP3503
+//TextureManager.h and TextureManager.cpp provided by Professor Fox in COP3503 to use for Minesweeper Project as a way 
+//to more easily deal with textures
 
 using std::unordered_map;
 using std::string;

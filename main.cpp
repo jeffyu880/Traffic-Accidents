@@ -4,9 +4,53 @@
 #include "Display.h"
 #include <iostream>
 #include "VisualElements.h"
+#include "Accidents.h"
+#include "MaxHeap.h"
+#include "MinHeap.h" //may change to max heap
+#include "redblacktree.h"
+#include "node.h"
+#include "ReadFile.h"
+
+void deleteRBTREE(Node* root) {
+    if (root->left != NULL) {
+        deleteRBTREE(root->left);
+    }
+    if (root->right != NULL) {
+        deleteRBTREE(root->right);
+    }
+    delete root;
+}
+
+void deleteTree(RedBlackTree& rbtree) {
+    deleteRBTREE(rbtree.mainRoot);
+}
+
 
 int main()
 {
+    //Read in the data:
+    bool resultSelected = false;
+    RedBlackTree rbtree;
+    MaxHeap<Accident> maxheap;
+    std::vector<Accident> accidents;
+
+    ReadFile("US_Accidents_100000.csv", accidents);
+    cout << "Done reading file." << std::endl;
+    cout << accidents.size() << endl;
+    for (auto accident : accidents) { //add all the accidents to the two data structures
+        //Node newNode(accident.getWeightedSeverity(), accident.city, accident.state, 0);
+        //Node* node = &newNode;
+
+        Node* node = new Node(accident.getWeightedSeverity(), accident.city, accident.state, 0);
+
+        rbtree.InsertNode(node);
+        maxheap.insert(accident);
+
+    }
+    cout << rbtree.treesize << endl;
+
+
+
     //INITIALIZE IMPORTANT OBJECTS NECESSARY TO PRINT THINGS TO SCREEN
     sf::RenderWindow window(sf::VideoMode(1900, 1000), "SFML works!");
     std::map<string, Button> buttons;
@@ -61,7 +105,7 @@ int main()
     //WHILE WINDOW IS OPEN
     while (window.isOpen())
     {
-
+        resultSelected = false;
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -69,13 +113,18 @@ int main()
             if (event.type == sf::Event::Closed) {
                 window.close();
                 TextureManager::Clear();
+                deleteTree(rbtree);
             }
 
             //If left click is detected, get coordinates and see if a button was pressed
             else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 auto coordinates = sf::Mouse::getPosition(window);
+                bool beforePressed = buttons["searchResults"].isPressed;
                 findButtonPressed(coordinates, buttons);
-
+                if ((!beforePressed) && buttons["searchResults"].isPressed) {
+                    resultSelected = true;
+                }
+                
             }
 
             //if text is entered, check if a text box was pressed; If it was, "echo" the character back to screen
@@ -118,8 +167,9 @@ int main()
 
         //display new board
         window.clear();
-        displayNewBoard(window, buttons, &search, &results, vect, states, city, state);
+        displayNewBoard(window, buttons, &search, &results, vect, states, city, state, rbtree, maxheap, resultSelected);
     }
 
     return 0;
 }
+
