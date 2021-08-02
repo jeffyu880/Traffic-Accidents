@@ -60,7 +60,7 @@ double ParseTimeDifference(string time) {
 }
 
 //Function to read in data from CSV file
-void ReadFile(string filename, unordered_map<string, MaxHeap<Accident>> maxStateMap, unordered_map<string, MinHeap<Accident>> minStateMap, unordered_map<string, RedBlackTree> treeStateMap) {
+void ReadFile(string filename, unordered_map<string, MaxHeap<Accident>>& maxStateMap, unordered_map<string, MinHeap<Accident>>& minStateMap, unordered_map<string, RedBlackTree>& treeStateMap) {
 	ifstream inFile(filename);
 
 	if (inFile.is_open()) {
@@ -179,6 +179,7 @@ void ReadFile(string filename, unordered_map<string, MaxHeap<Accident>> maxState
 			maxStateMap[accidentObj.getState()].insert(accidentObj);
 			minStateMap[accidentObj.getState()].insert(accidentObj);
 			Node* node = new Node(accidentObj.getWeightedSeverity(), accidentObj.getCity(), accidentObj.getState());
+			treeStateMap[accidentObj.getState()].InsertNode(node); 
 		}
 		cout << "File Has Been Read! Please Give Your Computer Praise For Completing This Task!" << endl;
 	}
@@ -188,7 +189,7 @@ void ReadFile(string filename, unordered_map<string, MaxHeap<Accident>> maxState
 }
 
 //Function to read in 100 data points to decrease compile time for testing
-void MinReadFile(string filename, unordered_map<string, MaxHeap<Accident>> maxStateMap, unordered_map<string, MinHeap<Accident>> minStateMap, unordered_map<string, RedBlackTree> treeStateMap) {
+void MinReadFile(string filename, unordered_map<string, MaxHeap<Accident>>& maxStateMap, unordered_map<string, MinHeap<Accident>>& minStateMap, unordered_map<string, RedBlackTree>& treeStateMap) {
 	ifstream inFile(filename);
 	int N = 100;
 
@@ -308,6 +309,7 @@ void MinReadFile(string filename, unordered_map<string, MaxHeap<Accident>> maxSt
 			maxStateMap[accidentObj.getState()].insert(accidentObj);
 			minStateMap[accidentObj.getState()].insert(accidentObj); 
 			Node* node = new Node(accidentObj.getWeightedSeverity(), accidentObj.getCity(), accidentObj.getState()); 
+			treeStateMap[accidentObj.getState()].InsertNode(node);
 			N -= 1;
 		}
 		cout << "File Has Been Read! Please Give Your Computer Praise For Completing This Task!" << endl;
