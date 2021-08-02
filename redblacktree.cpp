@@ -109,6 +109,12 @@ void RedBlackTree::PrintPostorder()
 {
 }
 
+RedBlackTree::~RedBlackTree() {
+    delete mainRoot->right; 
+    delete mainRoot->left; 
+    delete mainRoot;
+}
+
 /*****************************REFERENCES*********************/
 /*Source: Cheryl Resch video on Red Black Tree for BalanceTree
 https://mediasite.video.ufl.edu/Mediasite/Play/dd2c7230add6482e87e0c371fb3988931d
