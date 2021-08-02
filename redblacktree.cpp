@@ -7,12 +7,12 @@ using namespace std;
 /***********************PUBLIC SEARCH FUNCTIONS************************/
 Node* RedBlackTree::FindMostSevereAccident()
 {
-    return GetleastSevereAccident(mainRoot);
+    return GetmostSevereAccident(mainRoot);
 }
 
 Node* RedBlackTree::FindLeastSevereAccident()
 {
-    return GetmostSevereAccident(mainRoot);
+    return GetleastSevereAccident(mainRoot);
 }
 
 void RedBlackTree::FindXMostSevereAccidents(int numAccidents, vector<Node*>& Accidents)
@@ -203,7 +203,7 @@ void RedBlackTree::printingInorder(Node* node)
     // {
     //     cout << "black" << endl;
     // }
-    treesize++;
+    //treesize++;
     printingInorder(node->right);
 }
 /*****************************REFERENCES*********************/
@@ -284,9 +284,12 @@ Node* RedBlackTree::getUncle(Node* node)
     }
 }
 
-Node* RedBlackTree::GetmostSevereAccident(Node* node)
-{
-    if (node->right == nullptr)
+Node* RedBlackTree::GetmostSevereAccident(Node* node){
+    if (node == nullptr) {
+         Accident accidentObj;
+        return new Node(accidentObj);
+    }
+    else if (node->right == nullptr)
     {
         return node;
     }
