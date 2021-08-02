@@ -298,7 +298,11 @@ Node* RedBlackTree::GetmostSevereAccident(Node* node)
 
 Node* RedBlackTree::GetleastSevereAccident(Node* node)
 {
-    if (node->left == nullptr)
+    if (node == nullptr) {
+        Accident accidentObj; 
+        return new Node(accidentObj); 
+    }
+    else if (node->left == nullptr)
     {
         return node;
     }
