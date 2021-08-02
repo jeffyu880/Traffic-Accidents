@@ -1,67 +1,61 @@
 #include "redblacktree.h"
-#include "node.h"
+#include "Node.h"
 #include <iostream>
 
 using namespace std;
 
 /***********************PUBLIC SEARCH FUNCTIONS************************/
-Node *RedBlackTree::FindMostSevereAccident()
+Node* RedBlackTree::FindMostSevereAccident()
 {
     return GetleastSevereAccident(mainRoot);
 }
 
-Node *RedBlackTree::FindLeastSevereAccident()
+Node* RedBlackTree::FindLeastSevereAccident()
 {
     return GetmostSevereAccident(mainRoot);
 }
 
-void RedBlackTree::FindXMostSevereAccidents(int numAccidents, vector<Node *> &Accidents)
+void RedBlackTree::FindXMostSevereAccidents(int numAccidents, vector<Node*>& Accidents)
 {
 
     GetXmostSevereAccidents(mainRoot, numAccidents, Accidents);
     return;
 }
-void RedBlackTree::FindXLeastSevereAccidents(int numAccidents, vector<Node *> &Accidents)
+void RedBlackTree::FindXLeastSevereAccidents(int numAccidents, vector<Node*>& Accidents)
 {
 
     GetXleastSevereAccidents(mainRoot, numAccidents, Accidents);
     return;
 }
 
-void RedBlackTree::FindXMostSevereAccidentsInCity(int numAccidents, string city, vector<Node *> &Accidents)
+void RedBlackTree::FindXMostSevereAccidentsInCity(int numAccidents, string city, vector<Node*>& Accidents)
 {
 
     GetXmostSevereCityAccidents(mainRoot, numAccidents, city, Accidents);
     return;
 }
-void RedBlackTree::FindXMostSevereAccidentsInState(int numAccidents, string state, vector<Node *> &Accidents)
+void RedBlackTree::FindXMostSevereAccidentsInState(int numAccidents, string state, vector<Node*>& Accidents)
 {
 
     GetXmostSevereStateAccidents(mainRoot, numAccidents, state, Accidents);
     return;
 }
 
-void RedBlackTree::FindXMostSevereAccidentsInYear(int numAccidents, int year, vector<Node *> &Accidents)
-{
-
-    GetXmostSevereAccidentsInYear(mainRoot, numAccidents, year, Accidents);
-    return;
-}
 
 /*****************************************************************************/
-void RedBlackTree::InsertNode(Node *newNode)
+void RedBlackTree::InsertNode(Node* newNode)
 {
     mainRoot = Insert(mainRoot, newNode);
     BalanceTree(mainRoot, newNode);
 }
 
-Node *RedBlackTree::SearchNode(int severitytoFind)
+Node* RedBlackTree::SearchNode(int severitytoFind)
 {
     return Search(mainRoot, severitytoFind);
 }
 
 /***************************PRIVATE FUNCTIONS***********************************/
-Node *RedBlackTree::Insert(Node *root, Node *newNode)
+Node* RedBlackTree::Insert(Node* root, Node* newNode)
 {
     if (root == nullptr)
     {
@@ -82,7 +76,7 @@ Node *RedBlackTree::Insert(Node *root, Node *newNode)
 }
 
 //PARAMETERS CAN CHANGE
-Node *RedBlackTree::Search(Node *root, int severitytoFind)
+Node* RedBlackTree::Search(Node* root, int severitytoFind)
 {
     if (root == nullptr)
     {
@@ -115,12 +109,27 @@ void RedBlackTree::PrintPostorder()
 {
 }
 
+RedBlackTree::~RedBlackTree() {
+    DeleteTree(mainRoot); 
+    cout << "Destroying Things" << endl; 
+}
+
+void RedBlackTree::DeleteTree(Node* root) {
+    if (root == nullptr) {
+        return; 
+    }
+
+    DeleteTree(root->left);
+    DeleteTree(root->right); 
+    delete root; 
+}
+
 /*****************************REFERENCES*********************/
 /*Source: Cheryl Resch video on Red Black Tree for BalanceTree
 https://mediasite.video.ufl.edu/Mediasite/Play/dd2c7230add6482e87e0c371fb3988931d
  Code: BalanceTree
  ************************************************************/
-void RedBlackTree::BalanceTree(Node *root, Node *node)
+void RedBlackTree::BalanceTree(Node* root, Node* node)
 {
     //Case 1: tree is empty (no parent node, root is mainRoot)
     if (node->parent == nullptr)
@@ -138,9 +147,9 @@ void RedBlackTree::BalanceTree(Node *root, Node *node)
     }
 
     //Case 3: parent is red
-    Node *uncle = getUncle(node);
-    Node *grandparent = getGrandparent(node);
-    Node *parent = node->parent;
+    Node* uncle = getUncle(node);
+    Node* grandparent = getGrandparent(node);
+    Node* parent = node->parent;
     //Case 3a: if uncle is red, flip the colors of parent and uncle and grandparent and check for imbalances of grandparent
     if (uncle != nullptr && uncle->color == false)
     {
@@ -178,7 +187,7 @@ void RedBlackTree::BalanceTree(Node *root, Node *node)
     }
 }
 
-void RedBlackTree::printingInorder(Node *node)
+void RedBlackTree::printingInorder(Node* node)
 {
     if (node == nullptr)
     {
@@ -201,9 +210,9 @@ void RedBlackTree::printingInorder(Node *node)
 /*Source: Introduction to Algorithms by Thomas H. Cormen
  Code:  RotateLeft and RotateRight Functions
  ************************************************************/
-void RedBlackTree::RotateLeft(Node *root, Node *node)
+void RedBlackTree::RotateLeft(Node* root, Node* node)
 {
-    Node *newRoot = node->right;
+    Node* newRoot = node->right;
     //setting the node's right subtree equal to newRoot's left subtree
     node->right = newRoot->left;
     //newRoot's left parent is node's parent
@@ -231,9 +240,9 @@ void RedBlackTree::RotateLeft(Node *root, Node *node)
     return;
 }
 
-void RedBlackTree::RotateRight(Node *root, Node *node)
+void RedBlackTree::RotateRight(Node* root, Node* node)
 {
-    Node *newRoot = node->left;
+    Node* newRoot = node->left;
     //newRoot->parent = node->parent;
     node->left = newRoot->right;
     if (newRoot->right != nullptr)
@@ -258,12 +267,12 @@ void RedBlackTree::RotateRight(Node *root, Node *node)
     return;
 }
 
-Node *RedBlackTree::getGrandparent(Node *node)
+Node* RedBlackTree::getGrandparent(Node* node)
 {
     return node->parent->parent;
 }
 
-Node *RedBlackTree::getUncle(Node *node)
+Node* RedBlackTree::getUncle(Node* node)
 {
     if (node->parent->parent->left == node->parent)
     {
@@ -275,7 +284,7 @@ Node *RedBlackTree::getUncle(Node *node)
     }
 }
 
-Node *RedBlackTree::GetmostSevereAccident(Node *node)
+Node* RedBlackTree::GetmostSevereAccident(Node* node)
 {
     if (node->right == nullptr)
     {
@@ -287,7 +296,7 @@ Node *RedBlackTree::GetmostSevereAccident(Node *node)
     }
 }
 
-Node *RedBlackTree::GetleastSevereAccident(Node *node)
+Node* RedBlackTree::GetleastSevereAccident(Node* node)
 {
     if (node->left == nullptr)
     {
@@ -299,7 +308,7 @@ Node *RedBlackTree::GetleastSevereAccident(Node *node)
     }
 }
 
-void RedBlackTree::GetXmostSevereAccidents(Node *node, int &numAccidents, vector<Node *> &Accidents)
+void RedBlackTree::GetXmostSevereAccidents(Node* node, int& numAccidents, vector<Node*>& Accidents)
 {
     if (node == nullptr)
     {
@@ -314,7 +323,7 @@ void RedBlackTree::GetXmostSevereAccidents(Node *node, int &numAccidents, vector
     GetXmostSevereAccidents(node->left, numAccidents, Accidents);
 }
 
-void RedBlackTree::GetXleastSevereAccidents(Node *node, int &numAccidents, vector<Node *> &Accidents)
+void RedBlackTree::GetXleastSevereAccidents(Node* node, int& numAccidents, vector<Node*>& Accidents)
 {
     if (node == nullptr)
     {
@@ -329,7 +338,7 @@ void RedBlackTree::GetXleastSevereAccidents(Node *node, int &numAccidents, vecto
     GetXleastSevereAccidents(node->right, numAccidents, Accidents);
 }
 
-void RedBlackTree::GetXmostSevereCityAccidents(Node *node, int &numAccidents, string city, vector<Node *> &Accidents)
+void RedBlackTree::GetXmostSevereCityAccidents(Node* node, int& numAccidents, string city, vector<Node*>& Accidents)
 {
     if (node == nullptr)
     {
@@ -346,7 +355,7 @@ void RedBlackTree::GetXmostSevereCityAccidents(Node *node, int &numAccidents, st
     }
     GetXmostSevereCityAccidents(node->left, numAccidents, city, Accidents);
 }
-void RedBlackTree::GetXmostSevereStateAccidents(Node *node, int &numAccidents, string state, vector<Node *> &Accidents)
+void RedBlackTree::GetXmostSevereStateAccidents(Node* node, int& numAccidents, string state, vector<Node*>& Accidents)
 {
     if (node == nullptr)
     {
@@ -362,22 +371,4 @@ void RedBlackTree::GetXmostSevereStateAccidents(Node *node, int &numAccidents, s
         }
     }
     GetXmostSevereStateAccidents(node->left, numAccidents, state, Accidents);
-}
-
-void RedBlackTree::GetXmostSevereAccidentsInYear(Node *node, int &numAccidents, int year, vector<Node *> &Accidents)
-{
-    if (node == nullptr)
-    {
-        return;
-    }
-    GetXmostSevereAccidentsInYear(node->right, numAccidents, year, Accidents);
-    if (node->year == year)
-    {
-        if (numAccidents != 0)
-        {
-            Accidents.push_back(node);
-            numAccidents--;
-        }
-    }
-    GetXmostSevereAccidentsInYear(node->left, numAccidents, year, Accidents);
 }
