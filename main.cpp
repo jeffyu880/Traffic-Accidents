@@ -1,54 +1,33 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "TextureManager.h"
+#include<unordered_map>
 #include "Display.h"
 #include <iostream>
 #include "VisualElements.h"
 #include "Accidents.h"
 #include "MaxHeap.h"
-#include "MinHeap.h" //may change to max heap
+#include "MinHeap.h" 
 #include "redblacktree.h"
 #include "node.h"
 #include "ReadFile.h"
 
-void deleteRBTREE(Node* root) {
-    if (root->left != NULL) {
-        deleteRBTREE(root->left);
-    }
-    if (root->right != NULL) {
-        deleteRBTREE(root->right);
-    }
-    delete root;
-}
-
-void deleteTree(RedBlackTree& rbtree) {
-    deleteRBTREE(rbtree.mainRoot);
-}
+template<typename H>
+unordered_map<string, H> CreateMap<H>(); 
+void deleteRBTREE(Node* root);
+void deleteTree(RedBlackTree& rbtree); 
 
 
 int main()
 {
     //Read in the data:
     bool resultSelected = false;
-    RedBlackTree rbtree;
-    MaxHeap<Accident> maxheap;
-    std::vector<Accident> accidents;
+    unordered_map<string, MaxHeap<Accident>> maxStateMap = CreateMap<MaxHeap<Accident>>();
+    unordered_map<string, MinHeap<Accident>> minStateMap = CreateMap<MinHeap<Accident>>();
+    unordered_map<string, RedBlackTree> treeStateMap = CreateMap<RedBlackTree>();
 
-    ReadFile("US_Accidents_100000.csv", accidents);
+    ReadFile("US_Accidents_100000.csv", maxStateMap, minStateMap, treeStateMap);
     cout << "Done reading file." << std::endl;
-    cout << accidents.size() << endl;
-    for (auto accident : accidents) { //add all the accidents to the two data structures
-        //Node newNode(accident.getWeightedSeverity(), accident.city, accident.state, 0);
-        //Node* node = &newNode;
-
-        Node* node = new Node(accident.getWeightedSeverity(), accident.city, accident.state, 0);
-
-        rbtree.InsertNode(node);
-        maxheap.insert(accident);
-
-    }
-    cout << rbtree.treesize << endl;
-
 
 
     //INITIALIZE IMPORTANT OBJECTS NECESSARY TO PRINT THINGS TO SCREEN
@@ -171,5 +150,80 @@ int main()
     }
 
     return 0;
+}
+
+template<typename H>
+unordered_map<string, H> CreateMap<H>() {
+    unordered_map<string, H> StateMap;
+    StateMap["AL"];
+    StateMap["AK"];
+    StateMap["AZ"];
+    StateMap["AR"];
+    StateMap["CA"];
+    StateMap["CO"];
+    StateMap["CT"];
+    StateMap["DE"];
+    StateMap["FL"];
+    StateMap["GA"];
+
+    StateMap["HI"];
+    StateMap["ID"];
+    StateMap["IL"];
+    StateMap["IN"];
+    StateMap["IA"];
+    StateMap["KS"];
+    StateMap["KY"];
+    StateMap["LA"];
+    StateMap["ME"];
+    StateMap["MD"];
+
+    StateMap["MA"];
+    StateMap["MI"];
+    StateMap["MN"];
+    StateMap["MS"];
+    StateMap["MO"];
+    StateMap["MT"];
+    StateMap["NE"];
+    StateMap["NV"];
+    StateMap["NH"];
+    StateMap["NJ"];
+
+    StateMap["NM"];
+    StateMap["NY"];
+    StateMap["NC"];
+    StateMap["ND"];
+    StateMap["OH"];
+    StateMap["OK"];
+    StateMap["OR"];
+    StateMap["PA"];
+    StateMap["RI"];
+    StateMap["SC"];
+
+    StateMap["SD"];
+    StateMap["TN"];
+    StateMap["TX"];
+    StateMap["UT"];
+    StateMap["VT"];
+    StateMap["VA"];
+    StateMap["WA"];
+    StateMap["WV"];
+    StateMap["WI"];
+    StateMap["WY"];
+
+    return StateMap;
+}
+
+void deleteRBTREE(Node* root) {
+    if (root->left != NULL) {
+        deleteRBTREE(root->left);
+    }
+    if (root->right != NULL) {
+        deleteRBTREE(root->right);
+    }
+    delete root;
+}
+
+void deleteTree(RedBlackTree& rbtree) {
+    deleteRBTREE(rbtree.mainRoot);
 }
 
