@@ -1,6 +1,6 @@
 #include "node.h"
 
-Node::Node(float newSeverity, string city, string state, int year)
+Node::Node(double newSeverity, string city, string state, int year)
 {
     severityIndex = newSeverity;
     this->city = city;
