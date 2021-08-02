@@ -5,25 +5,26 @@ using namespace std;
 template<typename T>
 class MinHeap {
 public:
-    MinHeap();
-    MinHeap(int capacity);
-    MinHeap(const MinHeap& rhs);
-    MinHeap<T>& operator=(const MinHeap<T>& rhs);
-    ~MinHeap();
-    void resizeUp();
-    void resizeDown();
-    void swap(int ii, int jj);
-    void HeapifyUp(int index);
-    void HeapifyDown(int index);
-    void insert(T val);
-    T top();
-    T pop();
-    void MinKElements(int k, vector<T>& elements);
-    void remove();
+	MinHeap();
+	MinHeap(int capacity);
+	MinHeap(const MinHeap& rhs);
+	MinHeap<T>& operator=(const MinHeap<T>& rhs);
+	~MinHeap();
+	void resizeUp();
+	void resizeDown();
+	void swap(int ii, int jj);
+	void HeapifyUp(int index);
+	void HeapifyDown(int index);
+	void insert(T val);
+	T top();
+	T pop();
+	void MinKElements(int k, vector<T>& elements);
+	void remove();
+    unsigned int Size(); 
 private:
-    T* data;
-    unsigned int capacity;
-    unsigned int size;
+	T* data;
+	unsigned int capacity;
+	unsigned int size;
 };
 
 
@@ -205,3 +206,9 @@ void MinHeap<T>::remove() {
     resizeDown();
     HeapifyDown(0);
 }
+
+template<typename T>
+unsigned int MinHeap<T>::Size(){
+    return size; 
+}
+

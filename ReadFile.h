@@ -6,14 +6,19 @@
 #include <fstream>
 #include <sstream>
 #include "Accidents.h"
+#include "MaxHeap.h"
+#include "MinHeap.h"
+#include "Node.h"
+#include "RedBlackTree.h"
 #include <ctype.h>
-using namespace std;
+#include<unordered_map>
+using namespace std; 
 
 //Parses the time difference and stores it in units of hours
 double ParseTimeDifference(string time) {
-	int index;
+	unsigned int index; 
 	if (time.at(0) == '-') {
-		index = 1;
+		index = 1; 
 	}
 	else {
 		index = 0;
@@ -24,46 +29,44 @@ double ParseTimeDifference(string time) {
 	string temp = "";
 	//Gets the number of days and converts it to hours
 	while (isdigit(time.at(index))) {
-		days += time.at(index);
-		index += 1;
+		days += time.at(index); 
+		index += 1; 
 	}
-	hours = stod(days) * 60;
+	hours = stod(days) * 60; 
 	//Gets any spaces and characters between day and hours
 	while (!isdigit(time.at(index))) {
-		index += 1;
+		index += 1; 
 	}
 	//Gets the number of hours
 	while (isdigit(time.at(index))) {
-		temp += time.at(index);
-		index += 1;
+		temp += time.at(index); 
+		index += 1; 
 	}
-	hours += stod(temp);
+	hours += stod(temp); 
 
 	//Gets any spaces and characters between hours and minutes
 	while (!isdigit((time.at(index)))) {
-		index += 1;
+		index += 1; 
 	}
 
 	//Gets the number of minutes and converts them to hours
-	while (index < (int)time.size() && isdigit(time.at(index))) {
+	while (index < time.size() && isdigit(time.at(index))) {
 		minutes += time.at(index);
-		index += 1;
+		index += 1; 
 	}
-	hours += stod(minutes) / 60;
+	hours += stod(minutes) / 60; 
 
 	return hours;
 }
 
 //Function to read in data from CSV file
-void ReadFile(string filename, vector<Accident>& accidentVector) {
+void ReadFile(string filename, unordered_map<string, MaxHeap<Accident>> maxStateMap, unordered_map<string, MinHeap<Accident>> minStateMap, unordered_map<string, RedBlackTree> treeStateMap) {
 	ifstream inFile(filename);
 
 	if (inFile.is_open()) {
 		string line;
 		//Reading the top two lines which are header files
 		getline(inFile, line);
-		int N = 1;
-		int output = 1;
 		//Reading in data and creating A LOT of variables to store it all (Created vectors to more easily pass in data into the accident object constructor)
 		while (getline(inFile, line)) {
 			istringstream stream(line);
@@ -173,9 +176,11 @@ void ReadFile(string filename, vector<Accident>& accidentVector) {
 
 			//Storing data in an Accident class object and pushing it into an Accident vector
 			Accident accidentObj(intVector, stringVector, doubleVector);
-			accidentVector.push_back(accidentObj);
+			maxStateMap[accidentObj.getState()].insert(accidentObj);
+			minStateMap[accidentObj.getState()].insert(accidentObj);
+			Node* node = new Node(accidentObj.getWeightedSeverity(), accidentObj.getCity(), accidentObj.getState());
 		}
-		cout << "File Read" << endl;
+		cout << "File Has Been Read! Please Give Your Computer Praise For Completing This Task!" << endl;
 	}
 	else {
 		cout << "ERROR!!! THE FILE IS NOT OPEN! I REPEAT THE FILE IS NOT OPEN!!!! FIX ISSUE IMMEDIATELY!!!" << endl;
@@ -183,7 +188,7 @@ void ReadFile(string filename, vector<Accident>& accidentVector) {
 }
 
 //Function to read in 100 data points to decrease compile time for testing
-void MinReadFile(string filename, vector<Accident>& accidentVector) {
+void MinReadFile(string filename, unordered_map<string, MaxHeap<Accident>> maxStateMap, unordered_map<string, MinHeap<Accident>> minStateMap, unordered_map<string, RedBlackTree> treeStateMap) {
 	ifstream inFile(filename);
 	int N = 100;
 
@@ -191,12 +196,8 @@ void MinReadFile(string filename, vector<Accident>& accidentVector) {
 		string line;
 		//Reading the top two lines which are header files
 		getline(inFile, line);
-		getline(inFile, line);
-		int output = 1;
 		//Reading in data and creating A LOT of variables to store it all (Created vectors to more easily pass in data into the accident object constructor)
 		while (getline(inFile, line) && N > 0) {
-			cout << output << endl;
-			output += 1;
 			istringstream stream(line);
 
 			int severity;
@@ -278,7 +279,7 @@ void MinReadFile(string filename, vector<Accident>& accidentVector) {
 			intVector.push_back(vehiclesInvolved);
 
 			stringVector.push_back(ID);
-			stringVector.push_back(description);
+			stringVector.push_back(description); 
 			stringVector.push_back(city);
 			stringVector.push_back(county);
 			stringVector.push_back(state);
@@ -304,7 +305,9 @@ void MinReadFile(string filename, vector<Accident>& accidentVector) {
 
 			//Storing data in an Accident class object and pushing it into an Accident vector
 			Accident accidentObj(intVector, stringVector, doubleVector);
-			accidentVector.push_back(accidentObj);
+			maxStateMap[accidentObj.getState()].insert(accidentObj);
+			minStateMap[accidentObj.getState()].insert(accidentObj); 
+			Node* node = new Node(accidentObj.getWeightedSeverity(), accidentObj.getCity(), accidentObj.getState()); 
 			N -= 1;
 		}
 		cout << "File Has Been Read! Please Give Your Computer Praise For Completing This Task!" << endl;
@@ -313,3 +316,6 @@ void MinReadFile(string filename, vector<Accident>& accidentVector) {
 		cout << "ERROR!!! THE FILE IS NOT OPEN! I REPEAT THE FILE IS NOT OPEN!!!! FIX ISSUE IMMEDIATELY!!!" << endl;
 	}
 }
+
+
+

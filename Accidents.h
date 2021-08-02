@@ -6,25 +6,27 @@ using namespace std;
 
 class Accident {
 public:
+	Accident(); 
 	Accident(vector<int> intVector, vector<string> stringVector, vector<double> doubleVector);
 	Accident(const Accident& rhs);
-	Accident() {
-
-	}
 	bool operator<(const Accident& rhs);
-	bool operator>(const Accident& rhs);
-	Accident& operator=(const Accident& rhs);
-	void calculateSeverity();
-	double getWeightedSeverity();
-	string state;
-	string city;
+	bool operator>(const Accident& rhs); 
+	bool operator>(int rhs); 
+	bool operator<(int rhs); 
+	Accident&  operator=(const Accident& rhs); 
+	void calculateSeverity(); 
+	double getWeightedSeverity(); 
+	string getState(); 
+	string getCity(); 
 private:
 	int severity;
-	int casualties;
-	int vehiclesInvolved;
+	int casualties; 
+	int vehiclesInvolved; 
 	string ID;
 	string description;
+	string city;
 	string county;
+	string state;
 	string timeZone;
 	string windDirection;
 	string weatherCondition;
@@ -41,6 +43,6 @@ private:
 	double visibility;
 	double windSpeed;
 	double precipitation;
-	double weightedSeverity;
-	double timeDifference;
+	double weightedSeverity; 
+	double timeDifference; 
 };

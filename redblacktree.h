@@ -1,11 +1,11 @@
-#include "node.h"
+#include "Node.h"
 #include <vector>
 #pragma once
 
 class RedBlackTree
 {
 private:
-    //Node* mainRoot = nullptr;
+    Node* mainRoot = nullptr;
     void BalanceTree(Node* root, Node* node);
     void RotateLeft(Node* root, Node* node);
     void RotateRight(Node* root, Node* node);
@@ -21,13 +21,9 @@ private:
     void GetXleastSevereAccidents(Node* root, int& numAccidnets, vector<Node*>& Accidents);
     void GetXmostSevereCityAccidents(Node* root, int& numAccidents, string city, vector<Node*>& Accidents);
     void GetXmostSevereStateAccidents(Node* root, int& numAccidents, string state, vector<Node*>& Accidents);
-    void GetXmostSevereAccidentsInYear(Node* root, int& numAccidents, int year, vector<Node*>& Accidents);
+ 
 
 public:
-    int height();
-    Node* mainRoot = nullptr;
-    int maxDepth(Node* root);
-    int getHeight(Node* root);
     void InsertNode(Node* newNode);
     Node* SearchNode(int severitytoFind);
     Node* FindMostSevereAccident();
@@ -36,7 +32,7 @@ public:
     void FindXLeastSevereAccidents(int numAccidents, vector<Node*>& Accidents);
     void FindXMostSevereAccidentsInCity(int numAccidents, string city, vector<Node*>& Accidents);
     void FindXMostSevereAccidentsInState(int numAccidents, string state, vector<Node*>& Accidents);
-    void FindXMostSevereAccidentsInYear(int numAccidents, int year, vector<Node*>& Accidents);
+ 
 
     //TESTING
     int treesize = 0;

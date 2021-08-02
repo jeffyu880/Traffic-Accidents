@@ -1,63 +1,10 @@
 #include "redblacktree.h"
-#include "node.h"
+#include "Node.h"
 #include <iostream>
 
 using namespace std;
 
 /***********************PUBLIC SEARCH FUNCTIONS************************/
-
-int RedBlackTree::height() {
-    //return getHeight(mainRoot);
-    return maxDepth(mainRoot);
-}
-
-int RedBlackTree::maxDepth(Node* node)
-{
-    if (node == NULL)
-        return 0;
-    else
-    {
-        /* compute the depth of each subtree */
-        int lDepth = maxDepth(node->left);
-        int rDepth = maxDepth(node->right);
-
-        /* use the larger one */
-        if (lDepth > rDepth)
-            return(lDepth + 1);
-        else return(rDepth + 1);
-    }
-}
-
-
-int RedBlackTree::getHeight(Node* root) { //returns the height of a subtree given a root node
-
-    std::vector<Node*> currNodes;
-    currNodes.push_back(root);
-    int height = 1;
-    if (root == NULL) {
-        return 0;
-    }
-    while (1) {  //loop which for each level of the tree (starting at the root) increments the height if there are any children of the current level
-        std::vector<Node*> newNodes;
-        for (auto iter = currNodes.begin(); iter != currNodes.end(); iter++) {
-            if ((*iter)->left != NULL) {
-                newNodes.push_back((*iter)->left);
-            }
-            if ((*iter)->right != NULL) {
-                newNodes.push_back((*iter)->right);
-            }
-
-        }
-        if (newNodes.size() == 0) { //this process is repeated until a level is reached where no new children are found (this is end of tree and height is returned)
-            return height;
-        }
-        else {
-            height++;
-            currNodes = newNodes;
-        }
-    }
-}
-
 Node* RedBlackTree::FindMostSevereAccident()
 {
     return GetleastSevereAccident(mainRoot);
@@ -94,12 +41,6 @@ void RedBlackTree::FindXMostSevereAccidentsInState(int numAccidents, string stat
     return;
 }
 
-void RedBlackTree::FindXMostSevereAccidentsInYear(int numAccidents, int year, vector<Node*>& Accidents)
-{
-
-    GetXmostSevereAccidentsInYear(mainRoot, numAccidents, year, Accidents);
-    return;
-}
 
 /*****************************************************************************/
 void RedBlackTree::InsertNode(Node* newNode)
@@ -119,7 +60,6 @@ Node* RedBlackTree::Insert(Node* root, Node* newNode)
     if (root == nullptr)
     {
         root = newNode;
-        treesize++;
         return root;
     }
     else if (newNode->severityIndex > root->severityIndex)
@@ -132,7 +72,6 @@ Node* RedBlackTree::Insert(Node* root, Node* newNode)
         root->left = Insert(root->left, newNode);
         root->left->parent = root;
     }
-    
     return root;
 }
 
@@ -356,20 +295,15 @@ Node* RedBlackTree::GetleastSevereAccident(Node* node)
 
 void RedBlackTree::GetXmostSevereAccidents(Node* node, int& numAccidents, vector<Node*>& Accidents)
 {
-    if (numAccidents == 0) {
-        return;
-    }
     if (node == nullptr)
     {
         return;
     }
     GetXmostSevereAccidents(node->right, numAccidents, Accidents);
-
     if (numAccidents != 0)
     {
         Accidents.push_back(node);
         numAccidents--;
-        
     }
     GetXmostSevereAccidents(node->left, numAccidents, Accidents);
 }
@@ -422,22 +356,4 @@ void RedBlackTree::GetXmostSevereStateAccidents(Node* node, int& numAccidents, s
         }
     }
     GetXmostSevereStateAccidents(node->left, numAccidents, state, Accidents);
-}
-
-void RedBlackTree::GetXmostSevereAccidentsInYear(Node* node, int& numAccidents, int year, vector<Node*>& Accidents)
-{
-    if (node == nullptr)
-    {
-        return;
-    }
-    GetXmostSevereAccidentsInYear(node->right, numAccidents, year, Accidents);
-    if (node->year == year)
-    {
-        if (numAccidents != 0)
-        {
-            Accidents.push_back(node);
-            numAccidents--;
-        }
-    }
-    GetXmostSevereAccidentsInYear(node->left, numAccidents, year, Accidents);
 }

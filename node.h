@@ -44,5 +44,5 @@ struct Node
     float calculateSeverity();
 
     //TESTING
-    Node(float severityIndex, string city, string state, int year);
+    Node(float severityIndex, string city, string state);
 };

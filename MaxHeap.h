@@ -1,6 +1,6 @@
 #pragma once
 #include<vector>
-using namespace std;
+using namespace std; 
 
 template<typename T>
 class MaxHeap {
@@ -43,46 +43,51 @@ public:
         capacity = 1;
         size = 0;
     }
-
+  
 
 
     //                                                                      Heap Functions
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void insert(T val) {
-        if (size == capacity) {
-            resizeUp();
-            data[size] = val;
-            size += 1;
-            HeapifyUp(size - 1);
+        void insert(T val) {
+            if (size == capacity) {
+                resizeUp();
+                data[size] = val;
+                size += 1;
+                HeapifyUp(size - 1);
+            }
+            else {
+                data[size] = val;
+                size += 1;
+                HeapifyUp(size - 1);
+            }
         }
-        else {
-            data[size] = val;
-            size += 1;
-            HeapifyUp(size - 1);
+
+        T top() {
+            return data[0];
         }
-    }
 
-    T top() {
-        return data[0];
-    }
-
-    T pop() {
-        T temp = data[0];
-        remove();
-        return temp;
-    }
-
-
-    void MaxKElements(int k, vector<T>& elements) {
-        if (k == 0) {
-            return;
+        T pop() {
+            T temp = data[0];
+            remove();
+            return temp;
         }
-        else {
-            elements.push_back(pop());
-            MaxKElements(k - 1, elements);
+
+
+        void MaxKElements(int k, vector<T>& elements) {
+            if (k == 0) {
+                return;
+            }
+            else {
+                elements.push_back(pop());
+                MaxKElements(k - 1, elements);
+            }
         }
-    }
+
+        unsigned int Size() {
+            return size; 
+        }
+
 private:
     //                                                                       Utility Functions 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -120,7 +125,7 @@ private:
             size -= 1;
         }
         else {
-            T* tempArray = new T[capacity];
+            T* tempArray = new T[capacity]; 
             for (unsigned int ii = 0; ii < size - 1; ii += 1) {
                 tempArray[ii] = data[ii];
             }
@@ -139,8 +144,7 @@ private:
     void HeapifyUp(int index) {
         int parent = (index - 1) / 2;
 
-        
-        if (data[parent].getWeightedSeverity() > 0) { //changed
+        if (data[parent] > 0) {
             if (data[index] > data[parent]) {
                 swap(index, parent);
                 HeapifyUp(parent);
