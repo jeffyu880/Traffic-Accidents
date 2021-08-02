@@ -45,4 +45,8 @@ struct Node
 
     //TESTING
     Node(float severityIndex, string city, string state, int year);
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> parent of c30659e (Changes made on 8/1)

@@ -5,7 +5,64 @@
 using namespace std;
 
 /***********************PUBLIC SEARCH FUNCTIONS************************/
+<<<<<<< HEAD
+
+int RedBlackTree::height() {
+    //return getHeight(mainRoot);
+    return maxDepth(mainRoot);
+}
+
+int RedBlackTree::maxDepth(Node* node)
+{
+    if (node == NULL)
+        return 0;
+    else
+    {
+        /* compute the depth of each subtree */
+        int lDepth = maxDepth(node->left);
+        int rDepth = maxDepth(node->right);
+
+        /* use the larger one */
+        if (lDepth > rDepth)
+            return(lDepth + 1);
+        else return(rDepth + 1);
+    }
+}
+
+
+int RedBlackTree::getHeight(Node* root) { //returns the height of a subtree given a root node
+
+    std::vector<Node*> currNodes;
+    currNodes.push_back(root);
+    int height = 1;
+    if (root == NULL) {
+        return 0;
+    }
+    while (1) {  //loop which for each level of the tree (starting at the root) increments the height if there are any children of the current level
+        std::vector<Node*> newNodes;
+        for (auto iter = currNodes.begin(); iter != currNodes.end(); iter++) {
+            if ((*iter)->left != NULL) {
+                newNodes.push_back((*iter)->left);
+            }
+            if ((*iter)->right != NULL) {
+                newNodes.push_back((*iter)->right);
+            }
+
+        }
+        if (newNodes.size() == 0) { //this process is repeated until a level is reached where no new children are found (this is end of tree and height is returned)
+            return height;
+        }
+        else {
+            height++;
+            currNodes = newNodes;
+        }
+    }
+}
+
+Node* RedBlackTree::FindMostSevereAccident()
+=======
 Node *RedBlackTree::FindMostSevereAccident()
+>>>>>>> parent of c30659e (Changes made on 8/1)
 {
     return GetleastSevereAccident(mainRoot);
 }
@@ -41,7 +98,11 @@ void RedBlackTree::FindXMostSevereAccidentsInState(int numAccidents, string stat
     return;
 }
 
+<<<<<<< HEAD
+void RedBlackTree::FindXMostSevereAccidentsInYear(int numAccidents, int year, vector<Node*>& Accidents)
+=======
 void RedBlackTree::FindXMostSevereAccidentsInYear(int numAccidents, int year, vector<Node *> &Accidents)
+>>>>>>> parent of c30659e (Changes made on 8/1)
 {
 
     GetXmostSevereAccidentsInYear(mainRoot, numAccidents, year, Accidents);
@@ -66,6 +127,7 @@ Node *RedBlackTree::Insert(Node *root, Node *newNode)
     if (root == nullptr)
     {
         root = newNode;
+        treesize++;
         return root;
     }
     else if (newNode->severityIndex > root->severityIndex)
@@ -78,6 +140,7 @@ Node *RedBlackTree::Insert(Node *root, Node *newNode)
         root->left = Insert(root->left, newNode);
         root->left->parent = root;
     }
+    
     return root;
 }
 
@@ -301,15 +364,20 @@ Node *RedBlackTree::GetleastSevereAccident(Node *node)
 
 void RedBlackTree::GetXmostSevereAccidents(Node *node, int &numAccidents, vector<Node *> &Accidents)
 {
+    if (numAccidents == 0) {
+        return;
+    }
     if (node == nullptr)
     {
         return;
     }
     GetXmostSevereAccidents(node->right, numAccidents, Accidents);
+
     if (numAccidents != 0)
     {
         Accidents.push_back(node);
         numAccidents--;
+        
     }
     GetXmostSevereAccidents(node->left, numAccidents, Accidents);
 }
@@ -364,7 +432,11 @@ void RedBlackTree::GetXmostSevereStateAccidents(Node *node, int &numAccidents, s
     GetXmostSevereStateAccidents(node->left, numAccidents, state, Accidents);
 }
 
+<<<<<<< HEAD
+void RedBlackTree::GetXmostSevereAccidentsInYear(Node* node, int& numAccidents, int year, vector<Node*>& Accidents)
+=======
 void RedBlackTree::GetXmostSevereAccidentsInYear(Node *node, int &numAccidents, int year, vector<Node *> &Accidents)
+>>>>>>> parent of c30659e (Changes made on 8/1)
 {
     if (node == nullptr)
     {
@@ -380,4 +452,8 @@ void RedBlackTree::GetXmostSevereAccidentsInYear(Node *node, int &numAccidents, 
         }
     }
     GetXmostSevereAccidentsInYear(node->left, numAccidents, year, Accidents);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> parent of c30659e (Changes made on 8/1)

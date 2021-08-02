@@ -10,22 +10,60 @@
 #include "redblacktree.h"
 #include "node.h"
 #include "ReadFile.h"
+<<<<<<< HEAD
+
+void deleteRBTREE(Node* root) {
+    if (root->left != NULL) {
+        deleteRBTREE(root->left);
+    }
+    if (root->right != NULL) {
+        deleteRBTREE(root->right);
+    }
+    delete root;
+}
+
+void deleteTree(RedBlackTree& rbtree) {
+    deleteRBTREE(rbtree.mainRoot);
+}
+=======
+>>>>>>> parent of c30659e (Changes made on 8/1)
 
 
 int main()
 {
     //Read in the data:
+<<<<<<< HEAD
+    bool resultSelected = false;
+    RedBlackTree rbtree;
+    MaxHeap<Accident> maxheap;
+    std::vector<Accident> accidents;
+
+    vector<Accident> maxHeapAccidents;
+    vector<Node*> treeAccidents;
+
+    float timeDiffTree = 0.0f;
+    float timeDiffHeap = 0.0f;
+=======
 
     RedBlackTree rbtree;
     MaxHeap<Accident> maxheap;
     std::vector<Accident> accidents;
+>>>>>>> parent of c30659e (Changes made on 8/1)
 
     ReadFile("US_Accidents_100000.csv", accidents);
     cout << "Done reading file." << std::endl;
     cout << accidents.size() << endl;
     for (auto accident : accidents) { //add all the accidents to the two data structures
+<<<<<<< HEAD
+        //Node newNode(accident.getWeightedSeverity(), accident.city, accident.state, 0);
+        //Node* node = &newNode;
+
+        Node* node = new Node(accident.getWeightedSeverity(), accident.city, accident.state, 0);
+
+=======
         Node newNode(accident.severity, accident.city, accident.state, accident.startYear);
         Node* node = &newNode;
+>>>>>>> parent of c30659e (Changes made on 8/1)
         rbtree.InsertNode(node);
         maxheap.insert(accident);
 
@@ -96,13 +134,24 @@ int main()
             if (event.type == sf::Event::Closed) {
                 window.close();
                 TextureManager::Clear();
+<<<<<<< HEAD
+                deleteTree(rbtree);
+=======
+>>>>>>> parent of c30659e (Changes made on 8/1)
             }
 
             //If left click is detected, get coordinates and see if a button was pressed
             else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 auto coordinates = sf::Mouse::getPosition(window);
                 findButtonPressed(coordinates, buttons);
+<<<<<<< HEAD
+                if ((!beforePressed) && buttons["searchResults"].isPressed) {
+                    resultSelected = true;
+                }
+                
+=======
 
+>>>>>>> parent of c30659e (Changes made on 8/1)
             }
 
             //if text is entered, check if a text box was pressed; If it was, "echo" the character back to screen
@@ -145,7 +194,11 @@ int main()
 
         //display new board
         window.clear();
+<<<<<<< HEAD
+        displayNewBoard(window, buttons, &search, &results, vect, states, city, state, rbtree, maxheap, resultSelected, timeDiffTree, timeDiffHeap, treeAccidents, maxHeapAccidents);
+=======
         displayNewBoard(window, buttons, &search, &results, vect, states, city, state);
+>>>>>>> parent of c30659e (Changes made on 8/1)
     }
 
     return 0;
