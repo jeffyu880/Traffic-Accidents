@@ -25,6 +25,7 @@ private:
 
 public:
     ~RedBlackTree(); 
+    void DeleteTree(Node* root);
     void InsertNode(Node* newNode);
     Node* SearchNode(int severitytoFind);
     Node* FindMostSevereAccident();

@@ -62,7 +62,7 @@ Node* RedBlackTree::Insert(Node* root, Node* newNode)
         root = newNode;
         return root;
     }
-    else if (newNode->severityIndex > root->severityIndex)
+    else if (newNode->key.getWeightedSeverity() > root->key.getWeightedSeverity())
     {
         root->right = Insert(root->right, newNode);
         root->right->parent = root;
@@ -82,11 +82,11 @@ Node* RedBlackTree::Search(Node* root, int severitytoFind)
     {
         return nullptr;
     }
-    else if (severitytoFind == root->severityIndex)
+    else if (severitytoFind == root->key.getWeightedSeverity())
     {
         return root;
     }
-    else if (severitytoFind > root->severityIndex)
+    else if (severitytoFind > root->key.getWeightedSeverity())
     {
         return Search(root->right, severitytoFind);
     }
@@ -110,9 +110,18 @@ void RedBlackTree::PrintPostorder()
 }
 
 RedBlackTree::~RedBlackTree() {
-    delete mainRoot->right; 
-    delete mainRoot->left; 
-    delete mainRoot;
+    DeleteTree(mainRoot); 
+    cout << "Destroying Things" << endl; 
+}
+
+void RedBlackTree::DeleteTree(Node* root) {
+    if (root == nullptr) {
+        return; 
+    }
+
+    DeleteTree(root->left);
+    DeleteTree(root->right); 
+    delete root; 
 }
 
 /*****************************REFERENCES*********************/
@@ -336,7 +345,7 @@ void RedBlackTree::GetXmostSevereCityAccidents(Node* node, int& numAccidents, st
         return;
     }
     GetXmostSevereCityAccidents(node->right, numAccidents, city, Accidents);
-    if (node->city == city)
+    if (node->key.getCity()== city)
     {
         if (numAccidents != 0)
         {
@@ -353,7 +362,7 @@ void RedBlackTree::GetXmostSevereStateAccidents(Node* node, int& numAccidents, s
         return;
     }
     GetXmostSevereStateAccidents(node->right, numAccidents, state, Accidents);
-    if (node->state == state)
+    if (node->key.getState() == state)
     {
         if (numAccidents != 0)
         {

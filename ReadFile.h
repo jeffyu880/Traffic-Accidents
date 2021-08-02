@@ -178,7 +178,7 @@ void ReadFile(string filename, unordered_map<string, MaxHeap<Accident>>& maxStat
 			Accident accidentObj(intVector, stringVector, doubleVector);
 			maxStateMap[accidentObj.getState()].insert(accidentObj);
 			minStateMap[accidentObj.getState()].insert(accidentObj);
-			Node* node = new Node(accidentObj.getWeightedSeverity(), accidentObj.getCity(), accidentObj.getState());
+			Node* node = new Node(accidentObj);
 			treeStateMap[accidentObj.getState()].InsertNode(node); 
 		}
 		cout << "File Has Been Read! Please Give Your Computer Praise For Completing This Task!" << endl;
@@ -308,7 +308,7 @@ void MinReadFile(string filename, unordered_map<string, MaxHeap<Accident>>& maxS
 			Accident accidentObj(intVector, stringVector, doubleVector);
 			maxStateMap[accidentObj.getState()].insert(accidentObj);
 			minStateMap[accidentObj.getState()].insert(accidentObj); 
-			Node* node = new Node(accidentObj.getWeightedSeverity(), accidentObj.getCity(), accidentObj.getState()); 
+			Node* node = new Node(accidentObj); 
 			treeStateMap[accidentObj.getState()].InsertNode(node);
 			N -= 1;
 		}
