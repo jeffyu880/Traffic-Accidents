@@ -1,37 +1,32 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "TextureManager.h"
+#include<unordered_map>
 #include "Display.h"
 #include <iostream>
 #include "VisualElements.h"
 #include "Accidents.h"
 #include "MaxHeap.h"
-#include "MinHeap.h" //may change to max heap
+#include "MinHeap.h"
 #include "redblacktree.h"
 #include "node.h"
 #include "ReadFile.h"
 
 
+
+template<typename H>
+unordered_map<string, H> CreateMap();
+
+
 int main()
 {
     //Read in the data:
+    unordered_map<string, MaxHeap<Accident>> maxStateMap = CreateMap<MaxHeap<Accident>>();
+    unordered_map<string, MinHeap<Accident>> minStateMap = CreateMap<MinHeap<Accident>>();
+    unordered_map<string, RedBlackTree> treeStateMap = CreateMap<RedBlackTree>();
 
-    RedBlackTree rbtree;
-    MaxHeap<Accident> maxheap;
-    std::vector<Accident> accidents;
-
-    ReadFile("US_Accidents_100000.csv", accidents);
+    ReadFile("US_Accidents_100000.csv", maxStateMap, minStateMap, treeStateMap);
     cout << "Done reading file." << std::endl;
-    cout << accidents.size() << endl;
-    for (auto accident : accidents) { //add all the accidents to the two data structures
-        Node newNode(accident.severity, accident.city, accident.state, accident.startYear);
-        Node* node = &newNode;
-        rbtree.InsertNode(node);
-        maxheap.insert(accident);
-
-    }
-    cout << rbtree.treesize << endl;
-
 
 
     //INITIALIZE IMPORTANT OBJECTS NECESSARY TO PRINT THINGS TO SCREEN
@@ -55,40 +50,17 @@ int main()
     std::map<string, sf::ConvexShape> states;
     loadStates(states);
 
+    vector<StateButton> stateButtons;
+    loadStateButtons(stateButtons);
 
-    vect.push_back(&fair);
-    vect.push_back(&cloudy);
-    vect.push_back(&rain);
-    vect.push_back(&snow);
-    vect.push_back(&fair_np);
-    vect.push_back(&cloudy_np);
-    vect.push_back(&rain_np);
-    vect.push_back(&snow_np);
-
-
-    sf::String cityText = "";
-    sf::String stateText = "";
-
-    sf::Text city;
-    sf::Text state;
-
-    city.setString("");
-    state.setString("");
-
-    sf::Font font;
-    font.loadFromFile("Font/Montserrat-Medium.ttf");
-
-    city.setFont(font);
-    city.setCharacterSize(25);
-
-    state.setFont(font);
-    state.setCharacterSize(25);
-
+    float timeDiffTree = 0.0f;
+    float timeDiffHeap = 0.0f;
 
     //WHILE WINDOW IS OPEN
     while (window.isOpen())
     {
-
+        bool result = false;
+        string stateSelected;
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -96,58 +68,90 @@ int main()
             if (event.type == sf::Event::Closed) {
                 window.close();
                 TextureManager::Clear();
+                //  deleteTree(rbtree);
             }
 
             //If left click is detected, get coordinates and see if a button was pressed
             else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 auto coordinates = sf::Mouse::getPosition(window);
-                findButtonPressed(coordinates, buttons);
-
-            }
-
-            //if text is entered, check if a text box was pressed; If it was, "echo" the character back to screen
-            else if (event.type == sf::Event::TextEntered) {
-                if (buttons["City"].isPressed) {
-
-                    if (event.text.unicode == '\b') { //backspace -> remove a character from end
-                        if (cityText.getSize() != 0) {
-                            cityText.erase(cityText.getSize() - 1);
-                        }
-                    }
-                    else {
-                        cityText = cityText + event.text.unicode;
-                    }
+                stateSelected = findStateButtonPressed(coordinates, stateButtons);
+                if (stateSelected != "Not Found"); {
+                    result = true;
                 }
-                else if (buttons["State"].isPressed) {
-                    if (event.text.unicode == '\b') {
-                        if (stateText.getSize() != 0) {
-                            stateText.erase(stateText.getSize() - 1);
-                        }
-                    }
-                    else {
-                        stateText = stateText + event.text.unicode;
-                    }
-                }
-
-                //update the string
-                city.setPosition(sf::Vector2f(40, 530));
-                city.setString(cityText);
-
-                state.setPosition(sf::Vector2f(40, 605));
-                state.setString(stateText);
-
-                window.draw(city);
-                window.draw(state);
-
             }
 
         }
-
         //display new board
         window.clear();
-        displayNewBoard(window, buttons, &search, &results, vect, states, city, state);
+        if (result) {
+            displayNewBoard(window, states, treeStateMap, maxStateMap, stateButtons, stateSelected, timeDiffTree, timeDiffHeap);
+        }
+        else {
+            displayNewBoard(window, states, treeStateMap, maxStateMap, stateButtons);
+        }
     }
 
     return 0;
+}
+
+template<typename H>
+unordered_map<string, H> CreateMap() {
+    unordered_map<string, H> StateMap;
+    StateMap["AL"];
+    StateMap["AK"];
+    StateMap["AZ"];
+    StateMap["AR"];
+    StateMap["CA"];
+    StateMap["CO"];
+    StateMap["CT"];
+    StateMap["DE"];
+    StateMap["FL"];
+    StateMap["GA"];
+
+    StateMap["HI"];
+    StateMap["ID"];
+    StateMap["IL"];
+    StateMap["IN"];
+    StateMap["IA"];
+    StateMap["KS"];
+    StateMap["KY"];
+    StateMap["LA"];
+    StateMap["ME"];
+    StateMap["MD"];
+
+    StateMap["MA"];
+    StateMap["MI"];
+    StateMap["MN"];
+    StateMap["MS"];
+    StateMap["MO"];
+    StateMap["MT"];
+    StateMap["NE"];
+    StateMap["NV"];
+    StateMap["NH"];
+    StateMap["NJ"];
+
+    StateMap["NM"];
+    StateMap["NY"];
+    StateMap["NC"];
+    StateMap["ND"];
+    StateMap["OH"];
+    StateMap["OK"];
+    StateMap["OR"];
+    StateMap["PA"];
+    StateMap["RI"];
+    StateMap["SC"];
+
+    StateMap["SD"];
+    StateMap["TN"];
+    StateMap["TX"];
+    StateMap["UT"];
+    StateMap["VT"];
+    StateMap["VA"];
+    StateMap["WA"];
+    StateMap["WV"];
+    StateMap["WI"];
+    StateMap["WY"];
+
+    return StateMap;
 }
 
